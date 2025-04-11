@@ -1,5 +1,8 @@
 # 幸运转盘
 
+## 演示站
+[https://food.hauchet.cn](https://food.hauchet.cn)
+
 ## 项目介绍
 
 幸运转盘是一个基于 Vue 3 和 Element Plus 开发的互动应用，用于随机选择决策选项。用户可以添加、编辑和管理选项，通过旋转转盘来随机选择一个结果，并查看历史记录。
