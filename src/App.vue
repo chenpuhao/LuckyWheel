@@ -37,6 +37,9 @@
             const data = JSON.parse(savedWheel)
             wheelName.value = data.wheelName || '今天吃什么'
             items.value = data.items || [...defaultItems]
+            if (data.history) {
+              history.value = data.history
+            }
           } catch (e) {
             console.error('加载保存数据失败', e)
           }
@@ -83,7 +86,7 @@
       }
 
       // 监听数据变化自动保存
-      watch([wheelName, items], saveToLocalStorage, { deep: true })
+      watch([wheelName, items, history], saveToLocalStorage, { deep: true })
 
       // 添加新项目
       const addItem = () => {
@@ -355,7 +358,6 @@
       </template>
 
       <style scoped>
-
       .footer {
         text-align: center;
         padding: 1.5rem 0;
@@ -440,55 +442,6 @@
         opacity: 0;
         cursor: pointer;
         z-index: 1;
-      }
-
-      .main-content {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 2rem;
-      }
-
-      .wheel-section {
-        flex: 1;
-        min-width: 300px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .items-section {
-        flex: 1;
-        min-width: 300px;
-      }
-
-      .add-item-form {
-        margin-bottom: 1rem;
-      }
-
-      .items-list {
-        max-height: 400px;
-        overflow-y: auto;
-      }
-
-      .item-card {
-        margin-bottom: 0.5rem;
-      }
-
-      .item-content {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .item-name {
-        word-break: break-word;
-        flex: 1;
-      }
-
-      .item-actions {
-        display: flex;
-        gap: 0.5rem;
-        margin-left: 1rem;
       }
 
       .main-content {
@@ -613,19 +566,66 @@
         border-radius: 3px;
       }
 
+      .add-item-form {
+        margin-bottom: 1rem;
+      }
+
+      .items-list {
+        max-height: 400px;
+        overflow-y: auto;
+      }
+
+      .item-card {
+        margin-bottom: 0.5rem;
+      }
+
+      .item-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .item-name {
+        word-break: break-word;
+        flex: 1;
+      }
+
+      .item-actions {
+        display: flex;
+        gap: 0.5rem;
+        margin-left: 1rem;
+      }
+
+      /* 移动端优化样式 */
       @media (max-width: 1024px) {
         .main-content {
           flex-direction: column;
         }
 
-        .wheel-section, .items-section {
+        .wheel-section, .items-management {
           width: 100%;
         }
       }
 
       @media (max-width: 768px) {
         .app-container {
-          padding: 0.5rem;
+          padding: 0.5rem 0.5rem 1rem;
+        }
+
+        .main-content {
+          flex-direction: column;
+          gap: 1rem;
+        }
+
+        .wheel-section {
+          width: 100%;
+          order: 1; /* 把转盘放在顶部 */
+        }
+
+        .items-management {
+          width: 100%;
+          order: 2;
+          gap: 1rem;
         }
 
         .app-header {
@@ -642,11 +642,52 @@
           font-size: 1.5rem;
           width: 100%;
           text-align: center;
+          margin-bottom: 0.5rem;
         }
 
-        .items-section h2 {
-          font-size: 1.3rem;
-          text-align: center;
+        .header-actions button {
+          padding: 6px 12px;
+        }
+
+        .history-section, .items-section {
+          padding: 1rem;
+          border-radius: 12px;
+        }
+
+        .history-list {
+          max-height: 200px;
+        }
+
+        .history-section h2, .items-section h2 {
+          font-size: 1.1rem;
+          margin-bottom: 1rem;
+        }
+
+        .history-section h2::after, .items-section h2::after {
+          bottom: -5px;
+          height: 2px;
+        }
+
+        .item-card {
+          margin-bottom: 0.3rem;
+        }
+
+        .add-item-form {
+          margin-bottom: 0.5rem;
+        }
+
+        .items-list {
+          max-height: 250px;
+        }
+
+        .footer {
+          padding: 1rem 0;
+          margin-top: 1rem;
+        }
+
+        .footer p {
+          font-size: 0.8rem;
+          margin: 0.3rem 0;
         }
       }
 
@@ -658,30 +699,6 @@
         :deep(.el-button--small) {
           padding: 5px 10px;
           font-size: 12px;
-        }
-      }
-      @media (max-width: 1024px) {
-        .main-content {
-          flex-direction: column;
-        }
-
-        .wheel-section, .items-management {
-          width: 100%;
-        }
-      }
-
-      @media (max-width: 768px) {
-        .app-container {
-          padding: 0.5rem;
-        }
-
-        .history-section {
-          padding: 1.5rem 1rem;
-          border-radius: 15px;
-        }
-
-        .history-list {
-          max-height: 250px;
         }
       }
       </style>

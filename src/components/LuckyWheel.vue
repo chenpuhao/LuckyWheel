@@ -31,6 +31,26 @@ const radius = computed(() => (canvasSize.value / 2) - 50)
 // 使用ResizeObserver监听容器大小变化
 let resizeObserver = null
 
+// 修改触摸滑动方向为左右滑动
+const handleTouchStart = (event) => {
+  if (spinning.value || props.items.length === 0) return
+  const startX = event.touches[0].clientX
+
+  const handleTouchEnd = (endEvent) => {
+    const endX = endEvent.changedTouches[0].clientX
+    const deltaX = startX - endX
+
+    // 向左滑动超过40px时启动转盘
+    if (deltaX > 40) {
+      spin()
+    }
+
+    canvas.value.removeEventListener('touchend', handleTouchEnd)
+  }
+
+  canvas.value.addEventListener('touchend', handleTouchEnd)
+}
+
 onMounted(() => {
   updateCanvasSize()
   drawWheel()
@@ -46,6 +66,11 @@ onMounted(() => {
     })
     resizeObserver.observe(canvasContainer.value)
   }
+
+  // 添加触摸事件监听
+  if (canvas.value) {
+    canvas.value.addEventListener('touchstart', handleTouchStart)
+  }
 })
 
 // 清理事件监听
@@ -53,6 +78,10 @@ onUnmounted(() => {
   window.removeEventListener('resize', handleResize)
   if (resizeObserver) {
     resizeObserver.disconnect()
+  }
+  // 移除触摸事件监听
+  if (canvas.value) {
+    canvas.value.removeEventListener('touchstart', handleTouchStart)
   }
 })
 
@@ -289,6 +318,7 @@ defineExpose({ spin })
           :disabled="spinning || items.length === 0"
           :loading="spinning"
           class="spin-button"
+          style="touch-action: manipulation"
       >
         {{ spinning ? '旋转中...' : '开始旋转' }}
       </el-button>
@@ -417,11 +447,35 @@ defineExpose({ spin })
   }
 }
 
+/* 移动端优化样式 */
 @media (max-width: 768px) {
   .controls {
-    margin-top: 1.2rem;
+    margin-top: 1rem;
   }
 
+  .wheel-canvas {
+    border-width: 8px;
+    touch-action: pan-x pan-y;
+    cursor: grab;
+  }
+
+  .wheel-canvas:active {
+    cursor: grabbing;
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
+  }
+
+  .canvas-container::before {
+    content: "触摸屏下向左滑动此处旋转";
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    color: #999;
+    opacity: 0.8;
+    pointer-events: none;
+  }
 
   .pointer-container {
     width: 30px;
@@ -440,9 +494,10 @@ defineExpose({ spin })
   }
 
   .spin-button {
-    min-width: 130px;
-    padding: 10px 20px;
-    font-size: 1rem;
+    min-width: 120px;
+    font-size: 0.95rem;
+    padding: 8px 16px;
+    -webkit-tap-highlight-color: transparent;
   }
 }
 </style>
