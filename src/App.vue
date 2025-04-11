@@ -349,8 +349,8 @@
           </el-dialog>
         </div>
         <footer class="footer">
-          <p>© {{ new Date().getFullYear() }} hauchet All rights reserved.</p>
-          <p>Powered by 亡灵</p>
+          <p>© {{ new Date().getFullYear() }} <a href="https://wangling.hauchet.cn">hauchet</a> All rights reserved.</p>
+          <p>Powered by <a href="https://wangling.hauchet.cn">亡灵</a></p>
         </footer>
       </template>
 
@@ -358,11 +358,43 @@
 
       .footer {
         text-align: center;
-        padding: 1rem;
-        background-color: #f5f5f5;
-        border-top: 1px solid #eaeaea;
+        padding: 1.5rem 0;
+        background: linear-gradient(145deg, #fefefe, #f5f5f5);
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+        box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.03);
+        margin-top: 2rem;
+      }
+
+      .footer p {
+        margin: 0.5rem 0;
+        color: #666;
+        font-size: 0.9rem;
+      }
+
+      .footer a {
+        color: #409eff;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
         position: relative;
-        bottom: 0;
+      }
+
+      .footer a:hover {
+        color: #66b1ff;
+      }
+
+      .footer a::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0;
+        height: 1px;
+        background-color: #66b1ff;
+        transition: width 0.3s ease;
+      }
+
+      .footer a:hover::after {
         width: 100%;
       }
 
