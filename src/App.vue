@@ -348,9 +348,23 @@
             </template>
           </el-dialog>
         </div>
+        <footer class="footer">
+          <p>© {{ new Date().getFullYear() }} hauchet All rights reserved.</p>
+          <p>Powered by 亡灵</p>
+        </footer>
       </template>
 
       <style scoped>
+
+      .footer {
+        text-align: center;
+        padding: 1rem;
+        background-color: #f5f5f5;
+        border-top: 1px solid #eaeaea;
+        position: relative;
+        bottom: 0;
+        width: 100%;
+      }
 
       .app-container {
         max-width: 1280px;
