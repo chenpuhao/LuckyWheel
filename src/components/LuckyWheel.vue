@@ -31,17 +31,25 @@ const radius = computed(() => (canvasSize.value / 2) - 50)
 // 使用ResizeObserver监听容器大小变化
 let resizeObserver = null
 
-// 修改触摸滑动方向为左右滑动
+// 优化触摸滑动逻辑，区分上下半部分
 const handleTouchStart = (event) => {
   if (spinning.value || props.items.length === 0) return
+
   const startX = event.touches[0].clientX
+  const startY = event.touches[0].clientY
+
+  // 计算触摸点相对于转盘中心的位置
+  const rect = canvas.value.getBoundingClientRect()
+  const centerY = rect.top + rect.height / 2
+  const isUpperHalf = startY < centerY
 
   const handleTouchEnd = (endEvent) => {
     const endX = endEvent.changedTouches[0].clientX
     const deltaX = startX - endX
 
-    // 向左滑动超过40px时启动转盘
-    if (deltaX > 40) {
+    // 上半部分：向右滑动触发旋转
+    // 下半部分：向左滑动触发旋转
+    if ((isUpperHalf && deltaX < -40) || (!isUpperHalf && deltaX > 40)) {
       spin()
     }
 
@@ -466,7 +474,7 @@ defineExpose({ spin })
   }
 
   .canvas-container::before {
-    content: "触摸屏下向左滑动此处旋转";
+    content: "触摸屏时顺时针滑动开始旋转";
     position: absolute;
     bottom: 20px;
     left: 50%;

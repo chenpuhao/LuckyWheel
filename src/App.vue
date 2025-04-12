@@ -332,24 +332,32 @@
             </div>
           </main>
 
-          <!-- 编辑项目对话框 -->
-          <el-dialog
-            v-model="dialogVisible"
-            title="编辑选项"
-            width="30%"
-          >
-            <el-form v-if="editingItem">
-              <el-form-item label="选项名称">
-                <el-input v-model="editingItem.name" />
-              </el-form-item>
-            </el-form>
-            <template #footer>
-              <span class="dialog-footer">
-                <el-button @click="dialogVisible = false">取消</el-button>
-                <el-button type="primary" @click="saveEdit">保存</el-button>
-              </span>
-            </template>
-          </el-dialog>
+<!-- 编辑项目对话框 -->
+<el-dialog
+  v-model="dialogVisible"
+  title="编辑选项"
+  append-to-body
+  :close-on-click-modal="false"
+  :show-close="true"
+>
+  <el-form v-if="editingItem" :model="editingItem" label-position="top">
+    <el-form-item label="选项名称">
+      <el-input
+        v-model="editingItem.name"
+        maxlength="20"
+        show-word-limit
+        placeholder="请输入选项名称"
+        autofocus
+      />
+    </el-form-item>
+  </el-form>
+  <template #footer>
+    <span class="dialog-footer">
+      <el-button @click="dialogVisible = false">取消</el-button>
+      <el-button type="primary" @click="saveEdit" :disabled="!editingItem?.name?.trim()">保存</el-button>
+    </span>
+  </template>
+</el-dialog>
         </div>
         <footer class="footer">
           <p>© {{ new Date().getFullYear() }} <a href="https://wangling.hauchet.cn">hauchet</a> All rights reserved.</p>
@@ -484,7 +492,6 @@
 
       .history-section h2 {
         color: #333;
-        margin-bottom: 1.5rem;
         font-weight: 600;
         text-shadow: 0 1px 2px rgba(0,0,0,0.1);
         text-align: center;
@@ -696,9 +703,73 @@
           gap: 0.3rem;
         }
 
-        :deep(.el-button--small) {
-          padding: 5px 10px;
-          font-size: 12px;
+      }
+      /* 编辑对话框移动端优化 */
+      :deep(.el-dialog) {
+        width: 90% !important;
+        max-width: 500px;
+        margin: 0 auto !important;
+        border-radius: 12px;
+        overflow: hidden;
+      }
+
+      :deep(.el-dialog__header) {
+        padding: 16px 20px;
+        margin: 0;
+        background: #f7f7f7;
+        text-align: center;
+      }
+
+      :deep(.el-dialog__title) {
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      :deep(.el-dialog__body) {
+        padding: 20px;
+      }
+
+      :deep(.el-form-item__label) {
+        font-size: 16px;
+        padding-bottom: 8px;
+      }
+
+      :deep(.el-input) {
+        width: 100%;
+      }
+
+      :deep(.el-input__inner) {
+        height: 44px;
+        font-size: 16px;
+        padding: 0 15px;
+      }
+
+      :deep(.el-dialog__footer) {
+        padding: 10px 20px 20px;
+        text-align: center;
+      }
+
+      :deep(.dialog-footer .el-button) {
+        min-width: 100px;
+        font-size: 15px;
+        padding: 10px 0;
+        margin: 0 10px;
+      }
+
+      @media (max-width: 480px) {
+        :deep(.el-dialog__title) {
+          font-size: 16px;
+        }
+
+        :deep(.el-input__inner) {
+          height: 42px;
+          font-size: 15px;
+        }
+
+        :deep(.dialog-footer .el-button) {
+          width: 40%;
+          min-width: 80px;
+          margin: 0 5px;
         }
       }
       </style>
