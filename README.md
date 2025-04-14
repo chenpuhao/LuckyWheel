@@ -63,7 +63,7 @@ npm run preview
 
 ## 项目截图
 
-![转盘截图](./screenshot.png)
+![转盘截图](shortcut.png)
 
 ## 项目结构
 
