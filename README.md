@@ -86,7 +86,7 @@ luckywheel/
 
 ## 许可证
 
-© 2024 [亡灵](https://wangling.hauchet.cn)。保留所有权利。
+基于Apache-2.0 license开源
 
 ## 联系方式
 
